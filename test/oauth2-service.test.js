@@ -26,7 +26,7 @@ describe('OAuth 2 service', () => {
 
     expect(res.body).toMatchObject({
       issuer: url,
-      token_endpoint: `${url}/token`,
+      token_endpoint: `${url}/oauth/token`,
       authorization_endpoint: `${url}/authorize`,
       userinfo_endpoint: `${url}/userinfo`,
       token_endpoint_auth_methods_supported: ['none'],
@@ -82,7 +82,7 @@ describe('OAuth 2 service', () => {
 
   it('should expose a token endpoint that handles Resource Owner Password Credentials grants', async () => {
     const res = await request(service.requestHandler)
-      .post('/token')
+      .post('/oauth/token')
       .type('form')
       .send({
         grant_type: 'password',
@@ -113,7 +113,7 @@ describe('OAuth 2 service', () => {
 
   it('should expose a token endpoint that handles authorization_code grants', async () => {
     const res = await request(service.requestHandler)
-      .post('/token')
+      .post('/oauth/token')
       .type('form')
       .set('authorization', `Basic ${Buffer.from('dummy_client_id:dummy_client_secret').toString('base64')}`)
       .send({
@@ -146,7 +146,7 @@ describe('OAuth 2 service', () => {
 
   it('should expose a token endpoint that handles refresh_token grants', async () => {
     const res = await request(service.requestHandler)
-      .post('/token')
+      .post('/oauth/token')
       .type('form')
       .set('authorization', `Basic ${Buffer.from('dummy_client_id:dummy_client_secret').toString('base64')}`)
       .send({
@@ -218,7 +218,7 @@ describe('OAuth 2 service', () => {
     });
 
     const res = await request(service.requestHandler)
-      .post('/token')
+      .post('/oauth/token')
       .type('form')
       .set('authorization', `Basic ${Buffer.from('dummy_client_id:dummy_client_secret').toString('base64')}`)
       .send({
@@ -306,7 +306,7 @@ describe('OAuth 2 service', () => {
 
 function tokenRequest(app) {
   return request(app)
-    .post('/token')
+    .post('/oauth/token')
     .type('form')
     .expect('Cache-Control', 'no-store')
     .expect('Pragma', 'no-cache');
